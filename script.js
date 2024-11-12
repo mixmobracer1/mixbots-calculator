@@ -7,11 +7,17 @@ document.getElementById("get-stats-button").addEventListener("click", async func
         return;
     }
 
-    // The URL to fetch the MixBot data from Magic Eden API
-    const url = `https://api-mainnet.magiceden.dev/v2/tokens/${mintAddress}`;
+    // URL for Magic Eden's API with the mint address
+    const url = `https://cors-anywhere.herokuapp.com/https://api-mainnet.magiceden.dev/v2/tokens/${mintAddress}`;
 
     try {
-        const response = await fetch(url);
+        // Attempt to fetch data from the API
+        const response = await fetch(url, {
+            headers: {
+                "Accept": "application/json",
+                "Origin": "https://yourdomain.com",  // Change this to your domain or leave it if using CORS proxy
+            }
+        });
         const data = await response.json();
 
         console.log(data); // Debug log to check if we're getting the data
@@ -60,9 +66,6 @@ document.getElementById("get-stats-button").addEventListener("click", async func
                     }
                 }
             });
-
-            // Debug log to confirm final values
-            console.log("Final Stats - Acceleration:", acceleration, "MaxSpeed:", maxSpeed, "Durability:", durability, "Willpower:", willpower);
 
             // Display the results on the page
             document.getElementById("acceleration").textContent = `Acceleration: ${acceleration}`;
