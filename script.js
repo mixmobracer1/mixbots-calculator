@@ -15,6 +15,8 @@ document.getElementById("get-stats-button").addEventListener("click", async func
         const response = await fetch(url);
         const data = await response.json();
 
+        console.log(data); // Debug log to check the response from backend
+
         // Check if the response contains valid stats
         if (data.acceleration !== undefined && data.maxSpeed !== undefined && data.durability !== undefined && data.willpower !== undefined) {
             // Display the stats on the frontend
