@@ -3,23 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MixBot Stats Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>MixBot Stat Calculator</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { text-align: center; }
+        .container { max-width: 600px; margin: auto; padding: 20px; }
+        input[type="text"] { width: 100%; padding: 10px; margin: 10px 0; }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .result { margin-top: 20px; }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>MixBot Stats Calculator</h1>
-        <input type="text" id="mintAddress" placeholder="Enter MixBot Mint Address" />
-        <button onclick="fetchMixBotStats()">Get Stats</button>
+        <h1>MixBot Stat Calculator</h1>
+        <input type="text" id="mintAddress" placeholder="Enter MixBot Mint Address">
+        <button onclick="fetchMixBotData()">Calculate Stats</button>
 
-        <div id="results">
-            <p id="acceleration">Acceleration: --</p>
-            <p id="maxSpeed">Max Speed: --</p>
-            <p id="durability">Durability: --</p>
-            <p id="willpower">Willpower: --</p>
-        </div>
+        <div class="result" id="result"></div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Map of MixBot parts to stat effects
+        const statEffects = {
+            "LZRD": { "MaxSpeed": 1, "Willpower": -1 },
+            "FINK": { "Acceleration": 1, "MaxSpeed": -1 },
+            "MNSTR": { "Willpower": 1, "Durability": -1 },
+            "KNG": { "Durability": 1, "Acceleration": -1 },
+            "GRNT": { "Durability": 1, "Willpower": -1 },
+            "HUNTR": { "Acceleration": 1, "Durability": -1 },
+            "WZRD": { "Willpower": 1, "MaxSpeed": -1 },
+            "SLUG": { "MaxSpeed": 1, "Acceleration": -1 }
+        };
+
+        function fetchMixBotData() {
+            const mintAddress = document.getElementById("mintAddress").value;
+            const url = `https://api-mainnet.magiceden.dev/v2/tokens/${mintAddress}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.attributes) {
+                        calculateStats(data.attributes);
+                    } else {
+                        alert('Failed to fetch data or invalid mint address.');
+                    }
+                })
+                .catch(error => {
+                    alert('Failed to fetch MixBot data. Please check the mint address and try again.');
+                });
+        }
+
+        function calculateStats(attributes) {
+            let maxSpeed = 10;  // Default base stats
+            let acceleration = 10;
+            let durability = 10;
+            let willpower = 10;
+
+            // Iterate through the attributes and apply the stat changes
+            attributes.forEach(attribute => {
+                const part = attribute.value;
+                if (statEffects[part]) {
+                    const partStats = statEffects[part];
+                    maxSpeed += partStats.MaxSpeed || 0;
+                    acceleration += partStats.Acceleration || 0;
+                    durability += partStats.Durability || 0;
+                    willpower += partStats.Willpower || 0;
+                }
+            });
+
+            // Display results
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = `
+                <p>Acceleration: ${acceleration}</p>
+                <p>Max Speed: ${maxSpeed}</p>
+                <p>Durability: ${durability}</p>
+                <p>Willpower: ${willpower}</p>
+            `;
+        }
+    </script>
 </body>
 </html>
