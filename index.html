@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MixBot Stats Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>MixBot Stats Calculator</h1>
+        <input type="text" id="mintAddress" placeholder="Enter MixBot Mint Address" />
+        <button onclick="fetchMixBotStats()">Get Stats</button>
+
+        <div id="results">
+            <p id="acceleration">Acceleration: --</p>
+            <p id="maxSpeed">Max Speed: --</p>
+            <p id="durability">Durability: --</p>
+            <p id="willpower">Willpower: --</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
