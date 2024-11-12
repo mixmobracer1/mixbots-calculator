@@ -1,15 +1,21 @@
-// Function to fetch MixBot data from Magic Eden API
+// Function to fetch MixBot data from Magic Eden API using CORS Anywhere to bypass CORS issues
 function fetchMixBotStats(mintAddress) {
-    const url = `https://api-mainnet.magiceden.dev/v2/tokens/${mintAddress}`;
+    // Make sure you prepend the CORS proxy URL
+    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+    const apiUrl = `https://api-mainnet.magiceden.dev/v2/tokens/${mintAddress}`;
 
-    // Fetch data from Magic Eden API directly
-    fetch(url)
+    // Fetch data from Magic Eden API via the proxy
+    fetch(proxyUrl + apiUrl, {
+        headers: {
+            'Accept': 'application/json',
+            'Origin': 'https://yourdomain.com', // Replace with your actual domain if needed
+        }
+    })
     .then(response => response.json())
     .then(data => {
         // Check if the data contains attributes
         if (data && data.attributes) {
-            // Parse and calculate the stats
-            calculateMixBotStats(data.attributes);
+            calculateMixBotStats(data.attributes); // Calculate and display stats
         } else {
             alert('Failed to fetch valid MixBot data. Please check the mint address and try again.');
         }
