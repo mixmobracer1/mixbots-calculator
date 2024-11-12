@@ -29,8 +29,10 @@ document.getElementById("get-stats-button").addEventListener("click", async func
             attributes.forEach(attribute => {
                 const { trait_type, value } = attribute;
 
-                // Adjust stats based on trait types
-                if (trait_type === "top_body_type" || trait_type === "bottom_body_type" || trait_type === "shoulders_type" || trait_type === "legs_type") {
+                // Check if it's a valid part type that affects the MixBot stats
+                if (["top_body_type", "bottom_body_type", "shoulders_type", "legs_type"].includes(trait_type)) {
+
+                    // Adjust stats based on trait types
                     if (value === "SLUG") {
                         maxSpeed += 1; // +1 Max Speed
                         acceleration -= 1; // -1 Acceleration
@@ -58,6 +60,9 @@ document.getElementById("get-stats-button").addEventListener("click", async func
                     }
                 }
             });
+
+            // Debug log to confirm final values
+            console.log("Final Stats - Acceleration:", acceleration, "MaxSpeed:", maxSpeed, "Durability:", durability, "Willpower:", willpower);
 
             // Display the results on the page
             document.getElementById("acceleration").textContent = `Acceleration: ${acceleration}`;
