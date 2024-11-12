@@ -1,25 +1,21 @@
+// Example frontend code to display stats
 document.getElementById("get-stats-button").addEventListener("click", async function() {
     const mintAddress = document.getElementById("mint-address").value;
 
-    // Check if the mint address is not empty
+    // Check if mint address is not empty
     if (!mintAddress) {
         alert("Please enter a valid Mint Address");
         return;
     }
 
-    // The URL to call the server
+    // Call backend to fetch stats
     const url = `http://localhost:3000/fetchMixBotData?mintAddress=${mintAddress}`;
-
+    
     try {
-        // Fetch MixBot stats from the backend server
         const response = await fetch(url);
         const data = await response.json();
-
-        console.log(data); // Debug log to check the response from backend
-
-        // Check if the response contains valid stats
-        if (data.acceleration !== undefined && data.maxSpeed !== undefined && data.durability !== undefined && data.willpower !== undefined) {
-            // Display the stats on the frontend
+        
+        if (data) {
             document.getElementById("acceleration").textContent = `Acceleration: ${data.acceleration}`;
             document.getElementById("maxspeed").textContent = `Max Speed: ${data.maxSpeed}`;
             document.getElementById("durability").textContent = `Durability: ${data.durability}`;
