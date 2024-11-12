@@ -7,23 +7,20 @@ document.getElementById("get-stats-button").addEventListener("click", async func
         return;
     }
 
-    // URL for Magic Eden's API with the mint address
-    const url = `https://cors-anywhere.herokuapp.com/https://api-mainnet.magiceden.dev/v2/tokens/${mintAddress}`;
+    // Use CORS Proxy
+    const url = `https://api.allorigins.win/get?url=https://api-mainnet.magiceden.dev/v2/tokens/${mintAddress}`;
 
     try {
-        // Attempt to fetch data from the API
-        const response = await fetch(url, {
-            headers: {
-                "Accept": "application/json",
-                "Origin": "https://yourdomain.com",  // Change this to your domain or leave it if using CORS proxy
-            }
-        });
+        const response = await fetch(url);
         const data = await response.json();
 
-        console.log(data); // Debug log to check if we're getting the data
+        // Parse the JSON response
+        const jsonData = JSON.parse(data.contents);
 
-        if (data && data.attributes) {
-            const attributes = data.attributes;
+        console.log(jsonData); // Debug log to check if we're getting the data
+
+        if (jsonData && jsonData.attributes) {
+            const attributes = jsonData.attributes;
 
             // Set default stats (base stats for all MixBots)
             let acceleration = 10;
@@ -35,10 +32,7 @@ document.getElementById("get-stats-button").addEventListener("click", async func
             attributes.forEach(attribute => {
                 const { trait_type, value } = attribute;
 
-                // Check if it's a valid part type that affects the MixBot stats
                 if (["top_body_type", "bottom_body_type", "shoulders_type", "legs_type"].includes(trait_type)) {
-
-                    // Adjust stats based on trait types
                     if (value === "SLUG") {
                         maxSpeed += 1; // +1 Max Speed
                         acceleration -= 1; // -1 Acceleration
