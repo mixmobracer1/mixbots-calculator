@@ -1,19 +1,21 @@
 document.getElementById("get-stats-button").addEventListener("click", async function() {
     const mintAddress = document.getElementById("mint-address").value;
-    
+
     // Check if the mint address is not empty
     if (!mintAddress) {
         alert("Please enter a valid Mint Address");
         return;
     }
-    
+
     // The URL to fetch the MixBot data from Magic Eden API
     const url = `https://api-mainnet.magiceden.dev/v2/tokens/${mintAddress}`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
-        
+
+        console.log(data); // Debug log to check if we're getting the data
+
         if (data && data.attributes) {
             const attributes = data.attributes;
 
