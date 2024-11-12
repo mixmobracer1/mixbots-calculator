@@ -17,7 +17,7 @@ document.getElementById("get-stats-button").addEventListener("click", async func
         if (data && data.attributes) {
             const attributes = data.attributes;
 
-            // Set default stats
+            // Set default stats (base stats for all MixBots)
             let acceleration = 10;
             let maxSpeed = 10;
             let durability = 10;
@@ -27,16 +27,34 @@ document.getElementById("get-stats-button").addEventListener("click", async func
             attributes.forEach(attribute => {
                 const { trait_type, value } = attribute;
 
-                // Check and assign values based on the trait type
-                if (trait_type === "top_body_type" || trait_type === "bottom_body_type") {
-                    if (value === "LZRD") maxSpeed += 1;
-                    else if (value === "FINK") acceleration += 1;
-                    else if (value === "KNG") durability += 1;
+                // Adjust stats based on trait types
+                if (trait_type === "top_body_type" || trait_type === "bottom_body_type" || trait_type === "shoulders_type" || trait_type === "legs_type") {
+                    if (value === "SLUG") {
+                        maxSpeed += 1; // +1 Max Speed
+                        acceleration -= 1; // -1 Acceleration
+                    } else if (value === "HUNTR") {
+                        acceleration += 1; // +1 Acceleration
+                        durability -= 1; // -1 Durability
+                    } else if (value === "GRNT") {
+                        durability += 1; // +1 Durability
+                        willpower -= 1; // -1 Willpower
+                    } else if (value === "WZRD") {
+                        willpower += 1; // +1 Willpower
+                        maxSpeed -= 1; // -1 Max Speed
+                    } else if (value === "LZRD") {
+                        maxSpeed += 1; // +1 Max Speed
+                        willpower -= 1; // -1 Willpower
+                    } else if (value === "FINK") {
+                        acceleration += 1; // +1 Acceleration
+                        maxSpeed -= 1; // -1 Max Speed
+                    } else if (value === "KNG") {
+                        durability += 1; // +1 Durability
+                        acceleration -= 1; // -1 Acceleration
+                    } else if (value === "MNSTR") {
+                        willpower += 1; // +1 Willpower
+                        durability -= 1; // -1 Durability
+                    }
                 }
-                
-                // Check other attributes and update accordingly
-                if (trait_type === "total_races") acceleration += parseInt(value);
-                if (trait_type === "kos") durability += parseInt(value);
             });
 
             // Display the results on the page
